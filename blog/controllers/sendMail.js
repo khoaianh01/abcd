@@ -2,6 +2,7 @@ const ExpressError = require('../utils/ExpressError');
 const sendMails = require('../sendMail');
 const User = require('../models/users');
 const { Cookie } = require('express-session');
+const emailAdmin = process.env.EMAIL_ADMIN;
 
 module.exports.sendMailComment = (req,res,next) => {
    
@@ -10,7 +11,7 @@ module.exports.sendMailComment = (req,res,next) => {
     const comment = req.body.comment;
     const username = req.body.username;
     const fromEmail = req.body.email;
-    const toEmail = 'lehaianh111103@gmail.com';
+    const toEmail = emailAdmin;
     const contentHtml = '<p>' + comment +'</b><ul><li>Username:' + username + '</li><li>Email:' + fromEmail +'</p>';
     const isSend = sendMails.sendMail(username,fromEmail,comment,toEmail,contentHtml);
     if(isSend==='fail'){

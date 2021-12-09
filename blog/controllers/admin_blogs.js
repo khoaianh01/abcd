@@ -2,11 +2,12 @@ const Blog = require('../models/blogs');
 const Topic = require('../models/topics');
 const Images = require('../models/images');
 const User = require('../models/users');
+require('dotenv').config();
 
 const sendMails = require('../sendMail');
 const ExpressError = require('../utils/ExpressError');
 const { cloudinary } = require("../cloudinary");
-
+const emailAdmin = process.env.EMAIL_ADMIN;
 module.exports.renderIndex = async (req,res)=>{
     const topics = await Topic.find({}).populate('blogs');
     res.render('admins/index',{topics})
@@ -39,7 +40,7 @@ module.exports.postAddPost = async (req,res)=>{
        toEmails.push(user.email);
    })
    console.log(toEmails);
-   let fromEmail = 'lehaianh111103@gmail.com';
+   let fromEmail = emailAdmin;
    let text = `CoreIt có viết mới :localhost:3001/home/`;
    let contentHtml = '<p>' + `${text}` + '</p>';
    for(let i=0;i<toEmails.length;i++) {
@@ -48,17 +49,6 @@ module.exports.postAddPost = async (req,res)=>{
   
       res.redirect(`/home/${blog._id}`);
  }
-module.exports.postUploadImages = async (req,res)=>{
-    const fileUrl  = req.file.path;
-    const filename = req.file.filename;
-    const funcNum = req.query.CKEditorFuncNum;
-    const topics = await Topic.find({});
-    const images = await new Images({avata:[{url:fileUrl,filename:filename}]});
-    await images.save();
-
-    res.status(201).send("<script>window.parent.CKEDITOR.tools.callFunction('"+funcNum+"','"+fileUrl+"');</script>");
-   
-   }
 module.exports.renderTopic =  (req,res)=>{
     res.render('admins/addtopic');
 }
@@ -114,7 +104,6 @@ module.exports.deletePost = async (req,res)=>{
 module.exports.renderEditTopic = async (req, res)=>{
     const {id} = req.params;
     const topic = await Topic.findById(id);
- 
     res.render('admins/edittopic',{topic});
 }
 module.exports.editTopic = async (req,res)=>{

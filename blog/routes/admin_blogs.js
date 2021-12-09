@@ -8,8 +8,7 @@ const {isAdmin,isLoggedIn} = require('../middleware');
 router.route('/blog')
       .get(adminBlogs.renderAddPost)
       .post( parser.single('avata') ,adminBlogs.postAddPost);
-router.route('/upload')
-     .post(parser.single('upload'),adminBlogs.postUploadImages);
+
 router.route('/topic')
       .get(adminBlogs.renderTopic)
       .post(adminBlogs.postTopic);

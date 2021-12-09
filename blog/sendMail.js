@@ -2,11 +2,11 @@ const nodemailer =  require('nodemailer');
 const {google} = require('googleapis');
 
 
-const clientID = '738995248307-f317sjfta4kangfa7t9oc1fqvt6o0097.apps.googleusercontent.com';
-const clientSecret= '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';
-const refresh_token= "1//040cyZfGMZsERCgYIARAAGAQSNwF-L9IrAczlAFf15Eu97rEaUNKokiMtQyXmIHQpAuSZZ0qL59LCpFjpsvs_gmNTJgdEDYGueAY";
-const redirect_Uri = "https://developers.google.com/oauthplayground";
-
+const clientID = process.env.CLIENT_ID;
+const clientSecret= process.env.CLIENT_SECRET;
+const refresh_token= process.env.REFRESH_TOKEN;
+const redirect_Uri = process.env.REDIRECT_URI;
+const emailAdmin = process.env.EMAIL_ADMIN;
 const OAuth2client = new google.auth.OAuth2(clientID,clientSecret,redirect_Uri);
 OAuth2client.setCredentials({ refresh_token: refresh_token});
 async function sendMail(username,fromEmail,text,toEmail,contentHtml){
@@ -25,8 +25,8 @@ async function sendMail(username,fromEmail,text,toEmail,contentHtml){
                 service: 'gmail',
                 auth: {
                     type:'OAuth2',
-                    user: 'lehaianh111103@gmail.com',
-                    clientId :'738995248307-f317sjfta4kangfa7t9oc1fqvt6o0097.apps.googleusercontent.com',
+                    user: emailAdmin,
+                    clientId,
                     clientSecret: clientSecret,
                     refreshToken: refresh_token,
                     accessToken: accessToken
